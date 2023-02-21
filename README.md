@@ -1,1 +1,1 @@
-# resnets
+ResNet implimentaions from scratch
