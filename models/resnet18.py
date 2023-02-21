@@ -33,26 +33,26 @@ class ResidualBlock(nn.Module):
 
 
 class ResNet18(nn.Module):
-    def __init__(self, block, layers, num_classes=10):
+    def __init__(self, block, layer_list, num_classes=10):
         super(ResNet18, self).__init__()
         self.in_feature_maps = 64
         self.conv1 = nn.Sequential(
             nn.Conv2d(3, 64, kernel_size=7, stride=2, padding=3),
             nn.BatchNorm2d(64),
             nn.ReLU(),
-        )
-        self.maxpool = nn.MaxPool2d(kernel_size=3, stride=2, padding=1)
-        self.layer0 = self._make_layer(
-            block=block, feature_maps=64, num_blocks=layers[0], stride=1
+            nn.MaxPool2d(kernel_size=3, stride=2, padding=1),
         )
         self.layer1 = self._make_layer(
-            block=block, feature_maps=128, num_blocks=layers[1], stride=1
+            block=block, feature_maps=64, num_blocks=layer_list[0], stride=1
         )
         self.layer2 = self._make_layer(
-            block=block, feature_maps=256, num_blocks=layers[2], stride=2
+            block=block, feature_maps=128, num_blocks=layer_list[1], stride=1
         )
         self.layer3 = self._make_layer(
-            block=block, feature_maps=512, num_blocks=layers[3], stride=1
+            block=block, feature_maps=256, num_blocks=layer_list[2], stride=2
+        )
+        self.layer4 = self._make_layer(
+            block=block, feature_maps=512, num_blocks=layer_list[3], stride=1
         )
         self.avgpool = nn.AvgPool2d(4, stride=1)
         self.relu = nn.ReLU()
@@ -73,30 +73,36 @@ class ResNet18(nn.Module):
                 ),
                 nn.BatchNorm2d(feature_maps),
             )
-        layers = []
-        layers.append(
-            block(self.in_feature_maps, feature_maps, stride, skip_connection)
+        layer_list = []
+        layer_list.append(
+            block(
+                in_channels=self.in_feature_maps,
+                out_channels=feature_maps,
+                stride=stride,
+                skip_connection=skip_connection,
+            )
         )
         self.in_feature_maps = feature_maps
         for i in range(1, num_blocks):
-            layers.append(block(self.in_feature_maps, feature_maps))
+            layer_list.append(
+                block(in_channels=self.in_feature_maps, out_channels=feature_maps)
+            )
 
-        return nn.Sequential(*layers)
+        return nn.Sequential(*layer_list)
 
     def forward(self, x):
         batch_size = x.shape[0]
+
         assert x.shape == (batch_size, 3, 32, 32)
         x = self.conv1(x)
-        assert x.shape == (batch_size, 64, 16, 16)
-        x = self.maxpool(x)
-        assert x.shape == (batch_size, 64, 8, 8)
-        x = self.layer0(x)
         assert x.shape == (batch_size, 64, 8, 8)
         x = self.layer1(x)
-        assert x.shape == (batch_size, 128, 8, 8)
+        assert x.shape == (batch_size, 64, 8, 8)
         x = self.layer2(x)
-        assert x.shape == (batch_size, 256, 4, 4)
+        assert x.shape == (batch_size, 128, 8, 8)
         x = self.layer3(x)
+        assert x.shape == (batch_size, 256, 4, 4)
+        x = self.layer4(x)
         assert x.shape == (batch_size, 512, 4, 4)
         x = torch.flatten(x, start_dim=1)
         assert x.shape == (batch_size, 8192)
