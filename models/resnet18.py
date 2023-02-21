@@ -54,7 +54,6 @@ class ResNet18(nn.Module):
         self.layer4 = self._make_layer(
             block=block, feature_maps=512, num_blocks=layer_list[3], stride=1
         )
-        self.avgpool = nn.AvgPool2d(4, stride=1)
         self.relu = nn.ReLU()
         self.fc1 = nn.Linear(8192, 1024)
         self.fc2 = nn.Linear(1024, 256)
