@@ -66,7 +66,10 @@ class ResNet18(nn.Module):
 
             skip_connection = nn.Sequential(
                 nn.Conv2d(
-                    self.in_feature_maps, feature_maps, kernel_size=1, stride=stride
+                    in_channels=self.in_feature_maps,
+                    out_channels=feature_maps,
+                    kernel_size=1,
+                    stride=stride,
                 ),
                 nn.BatchNorm2d(feature_maps),
             )
