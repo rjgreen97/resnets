@@ -73,16 +73,16 @@ class ResNet101(nn.Module):
             nn.MaxPool2d(kernel_size=3, stride=2, padding=1),
         )
         self.layer1 = self._make_layer(
-            block=block, num_blocks=layer_list[0], feature_maps=64
+            block=block, num_blocks=layer_list[0], feature_maps=64, stride=1
         )
         self.layer2 = self._make_layer(
-            block=block, num_blocks=layer_list[1], feature_maps=128, stride=2
+            block=block, num_blocks=layer_list[1], feature_maps=128, stride=1
         )
         self.layer3 = self._make_layer(
             block=block, num_blocks=layer_list[2], feature_maps=256, stride=2
         )
         self.layer4 = self._make_layer(
-            block=block, num_blocks=layer_list[3], feature_maps=512, stride=2
+            block=block, num_blocks=layer_list[3], feature_maps=512, stride=1
         )
         self.avgpool = nn.AdaptiveAvgPool2d((1, 1))
         self.fc1 = nn.Linear(in_features=512 * block.expansion, out_features=512)
@@ -129,11 +129,11 @@ class ResNet101(nn.Module):
         x = self.layer1(x)
         assert x.shape == (batch_size, 256, 8, 8)
         x = self.layer2(x)
-        assert x.shape == (batch_size, 512, 4, 4)
+        assert x.shape == (batch_size, 512, 8, 8)
         x = self.layer3(x)
-        assert x.shape == (batch_size, 1024, 2, 2)
+        assert x.shape == (batch_size, 1024, 4, 4)
         x = self.layer4(x)
-        assert x.shape == (batch_size, 2048, 1, 1)
+        assert x.shape == (batch_size, 2048, 4, 4)
         x = self.avgpool(x)
         assert x.shape == (batch_size, 2048, 1, 1)
         x = torch.flatten(x, start_dim=1)
