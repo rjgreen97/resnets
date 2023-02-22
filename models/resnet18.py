@@ -1,6 +1,5 @@
 import torch
 import torch.nn as nn
-import torch.nn.functional as F
 
 
 class ResidualBlock(nn.Module):
@@ -37,8 +36,10 @@ class ResNet18(nn.Module):
         super(ResNet18, self).__init__()
         self.in_feature_maps = 64
         self.conv1 = nn.Sequential(
-            nn.Conv2d(3, 64, kernel_size=7, stride=2, padding=3),
-            nn.BatchNorm2d(64),
+            nn.Conv2d(
+                in_channels=3, out_channels=64, kernel_size=7, stride=2, padding=3
+            ),
+            nn.BatchNorm2d(num_features=64),
             nn.ReLU(),
             nn.MaxPool2d(kernel_size=3, stride=2, padding=1),
         )
@@ -61,8 +62,9 @@ class ResNet18(nn.Module):
 
     def _make_layer(self, block, feature_maps, num_blocks, stride=1):
         skip_connection = None
-        if stride != 1 or self.in_feature_maps != feature_maps:
+        layer_list = []
 
+        if stride != 1 or self.in_feature_maps != feature_maps:
             skip_connection = nn.Sequential(
                 nn.Conv2d(
                     in_channels=self.in_feature_maps,
@@ -72,7 +74,7 @@ class ResNet18(nn.Module):
                 ),
                 nn.BatchNorm2d(feature_maps),
             )
-        layer_list = []
+
         layer_list.append(
             block(
                 in_channels=self.in_feature_maps,
@@ -81,12 +83,12 @@ class ResNet18(nn.Module):
                 skip_connection=skip_connection,
             )
         )
+
         self.in_feature_maps = feature_maps
-        for i in range(1, num_blocks):
+        for _i in range(1, num_blocks):
             layer_list.append(
                 block(in_channels=self.in_feature_maps, out_channels=feature_maps)
             )
-
         return nn.Sequential(*layer_list)
 
     def forward(self, x):
