@@ -3,6 +3,11 @@ import torch.nn as nn
 
 
 class Bottleneck(nn.Module):
+    """A Bottleneck Residual Block is a variant of the residual block that utilises 1x1 convolutions
+    to create a bottleneck. The use of a bottleneck reduces the number of parameters and
+    matrix multiplications. The idea is to make residual blocks as thin as possible to increase
+    depth and have less parameters."""
+
     expansion = 4
 
     def __init__(self, in_channels, out_channels, skip_connection=None, stride=1):
@@ -144,6 +149,7 @@ class ResNet101(nn.Module):
         assert x.shape == (batch_size, 128)
         x = self.fc3(x)
         assert x.shape == (batch_size, 10)
+
         return x
 
 
