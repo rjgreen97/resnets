@@ -60,6 +60,20 @@ def load_data():
     return train_dataloader, test_dataloader
 
 
+classes = (
+        "plane",
+        "car",
+        "bird",
+        "cat",
+        "deer",
+        "dog",
+        "frog",
+        "horse",
+        "ship",
+        "truck",
+    )
+
+
 def train(train_dataloader):
     model.train()
     best_validation_accuracy = 0

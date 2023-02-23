@@ -9,15 +9,3 @@ class TrainingConfig(BaseModel):
     weight_decay: float = 0.001
     num_epochs: int = 1000
     patience: int = 15
-    classes: list = (
-        "plane",
-        "car",
-        "bird",
-        "cat",
-        "deer",
-        "dog",
-        "frog",
-        "horse",
-        "ship",
-        "truck",
-    )
