@@ -32,7 +32,7 @@ class ResidualBlock(nn.Module):
 
 
 class ResNet18(nn.Module):
-    def __init__(self, block, layer_list, num_classes=10):
+    def __init__(self, block: nn.Module, layer_list: list, num_classes: int = 10):
         super(ResNet18, self).__init__()
         self.in_feature_maps = 64
         self.conv1 = nn.Sequential(
