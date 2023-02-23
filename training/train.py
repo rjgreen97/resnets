@@ -80,7 +80,7 @@ def train(train_dataloader):
             loss.backward()
             optimizer.step()
 
-            loop.set_description(f"Epoch [{epoch/config.num_epochs}]")
+            loop.set_description(f"Epoch [{epoch}/{config.num_epochs}]")
             loop.set_postfix(loss=loss.item())
 
         print(f"Training Loss: {loss.item():.3f}")
