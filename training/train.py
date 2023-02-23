@@ -10,16 +10,16 @@ from models.resnet101 import Bottleneck, ResNet101
 from training.training_config import TrainingConfig
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-# print(torch.cuda.get_device_name())
-# print(torch.__version__)
-# print(torch.version.cuda)
+print(torch.cuda.get_device_name())
+print(torch.__version__)
+print(torch.version.cuda)
 
 config = TrainingConfig()
 
 classes = config.classes
 model_checkpoint_path = config.model_checkpoint_path
 
-model = ResNet101().to(device)
+model = ResNet101(Bottleneck, [3, 4, 23, 3]).to(device)
 
 transform = transforms.Compose(
     [
@@ -40,14 +40,14 @@ optimizer = optim.Adam(
 
 def load_data():
     train_dataset = torchvision.datasets.CIFAR10(
-        root=config.data_root_dir, train=True, download=False, transform=transform
+        root=config.data_root_dir, train=True, download=True, transform=transform
     )
     train_dataloader = torch.utils.data.DataLoader(
         train_dataset, batch_size=config.batch_size, shuffle=True, num_workers=0
     )
 
     test_dataset = torchvision.datasets.CIFAR10(
-        root=config.data_root_dir, train=False, download=False, transform=transform
+        root=config.data_root_dir, train=False, download=True, transform=transform
     )
     test_dataloader = torch.utils.data.DataLoader(
         test_dataset, batch_size=config.batch_size, shuffle=False, num_workers=0
