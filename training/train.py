@@ -1,11 +1,8 @@
-import matplotlib.pyplot as plt
-import numpy as np
 import torch
 import torch.nn as nn
 import torch.optim as optim
 import torchvision
 import torchvision.transforms as transforms
-from PIL import Image
 from tqdm import tqdm
 
 from models.resnet18 import ResidualBlock, ResNet18
