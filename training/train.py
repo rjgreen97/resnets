@@ -21,8 +21,8 @@ config = TrainingConfig()
 model_checkpoint_path = config.model_checkpoint_path
 
 # model = ResNet18(ResidualBlock, [2, 2, 2, 2]).to(device)
-# model = ResNet34(ResidualBlock, [3, 4, 6, 3]).to(device)
-model = ResNet50(Bottleneck, [3, 4, 6, 3]).to(device)
+model = ResNet34(ResidualBlock, [3, 4, 6, 3]).to(device)
+# model = ResNet50(Bottleneck, [3, 4, 6, 3]).to(device)
 # model = ResNet101(Bottleneck, [3, 4, 23, 3]).to(device)
 
 transform = transforms.Compose(
