@@ -1,4 +1,4 @@
-ResNet18, ResNet34, ResNet50 and ResNet101 implimentaions written from scratch using PyTorch
+ResNet18, ResNet34, ResNet50 and ResNet101 implimentaions written from scratch with PyTorch
 
 Training script set up to run on the CIFAR10 dataset available in torchvision.datasets
 
