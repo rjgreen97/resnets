@@ -30,7 +30,7 @@ without modifying the solvers.
 
 # Training Instructions
 ## 1) Install Requirements
-## Built With: `Python 3.10`
+Built With: `Python 3.10`
 ```
 pip install -r equirements.txt
 ```
