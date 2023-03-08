@@ -29,9 +29,8 @@ without modifying the solvers.
 <br />
 
 # Training Instructions
-## Built With
-* `Python 3.10`
 ## 1) Install Requirements
+## Built With: `Python 3.10`
 ```
 pip install -r equirements.txt
 ```
