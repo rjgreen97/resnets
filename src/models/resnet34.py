@@ -1,37 +1,17 @@
 import torch
 import torch.nn as nn
 
-
-class ResidualBlock(nn.Module):
-    def __init__(self, in_channels, out_channels, stride=1, skip_connection=None):
-        super(ResidualBlock, self).__init__()
-        self.conv1 = nn.Sequential(
-            nn.Conv2d(
-                in_channels, out_channels, kernel_size=3, stride=stride, padding=1
-            ),
-            nn.BatchNorm2d(num_features=out_channels),
-            nn.ReLU(),
-        )
-        self.conv2 = nn.Sequential(
-            nn.Conv2d(out_channels, out_channels, kernel_size=3, stride=1, padding=1),
-            nn.BatchNorm2d(num_features=out_channels),
-        )
-        self.skip_connection = skip_connection
-        self.relu = nn.ReLU()
-        self.out_channels = out_channels
-
-    def forward(self, x):
-        residual = x
-        out = self.conv1(x)
-        out = self.conv2(out)
-        if self.skip_connection:
-            residual = self.skip_connection(x)
-        out += residual
-        out = self.relu(out)
-        return out
+from src.models.residual_block import ResidualBlock
 
 
 class ResNet34(nn.Module):
+
+    """
+    A residual network with 34 layers that takes in a color 32x32 image and outputs a 10 dimensional
+    vector. The network is composed of an inital downsampling layer, followed by 4 residual blocks,
+    followed finally by a collection of fully connected layers.
+    """
+
     def __init__(self, block: nn.Module, layer_list: list, num_classes: int = 10):
         super(ResNet34, self).__init__()
         self.in_feature_maps = 64

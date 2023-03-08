@@ -1,66 +1,17 @@
 import torch
 import torch.nn as nn
 
-
-class Bottleneck(nn.Module):
-    """A Bottleneck Residual Block is a variant of the residual block that utilises 1x1 convolutions
-    to create a bottleneck. The use of a bottleneck reduces the number of parameters and
-    matrix multiplications. The idea is to make residual blocks as thin as possible to increase
-    depth and have less parameters."""
-
-    expansion = 4
-
-    def __init__(self, in_channels, out_channels, skip_connection=None, stride=1):
-        super(Bottleneck, self).__init__()
-        self.conv1 = nn.Sequential(
-            nn.Conv2d(
-                in_channels=in_channels,
-                out_channels=out_channels,
-                kernel_size=1,
-                stride=1,
-                padding=0,
-            ),
-            nn.BatchNorm2d(num_features=out_channels),
-            nn.ReLU(),
-        )
-        self.conv2 = nn.Sequential(
-            nn.Conv2d(
-                in_channels=out_channels,
-                out_channels=out_channels,
-                kernel_size=3,
-                stride=stride,
-                padding=1,
-            ),
-            nn.BatchNorm2d(num_features=out_channels),
-            nn.ReLU(),
-        )
-        self.conv3 = nn.Sequential(
-            nn.Conv2d(
-                in_channels=out_channels,
-                out_channels=out_channels * self.expansion,
-                kernel_size=1,
-                stride=1,
-                padding=0,
-            ),
-            nn.BatchNorm2d(out_channels * self.expansion),
-        )
-        self.skip_connection = skip_connection
-        self.stride = stride
-        self.relu = nn.ReLU()
-
-    def forward(self, x):
-        residual = x
-        out = self.conv1(x)
-        out = self.conv2(out)
-        out = self.conv3(out)
-        if self.skip_connection:
-            residual = self.skip_connection(residual)
-        out += residual
-        out = self.relu(out)
-        return out
+from src.models.bottleneck_block import Bottleneck
 
 
 class ResNet101(nn.Module):
+
+    """
+    A residual network with 101 layers that takes in a color 32x32 image and outputs a 10 dimensional
+    vector. The network is composed of an inital downsampling layer, followed by 4 bottleneck blocks,
+    followed finally by a collection of fully connected layers.
+    """
+
     def __init__(self, block, layer_list, num_classes=10):
         super(ResNet101, self).__init__()
         self.in_feature_maps = 64

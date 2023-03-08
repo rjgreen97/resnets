@@ -5,10 +5,12 @@ import torchvision
 import torchvision.transforms as transforms
 from tqdm import tqdm
 
-from models.resnet18 import ResidualBlock, ResNet18
-from models.resnet34 import ResidualBlock, ResNet34
-from models.resnet50 import Bottleneck, ResNet50
-from models.resnet101 import Bottleneck, ResNet101
+from src.models.bottleneck_block import Bottleneck
+from src.models.residual_block import ResidualBlock
+from src.models.resnet18 import ResNet18
+from src.models.resnet34 import ResNet34
+from src.models.resnet50 import ResNet50
+from src.models.resnet101 import ResNet101
 from training.training_config import TrainingConfig
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -60,17 +62,17 @@ def load_data():
 
 
 classes = (
-        "plane",
-        "car",
-        "bird",
-        "cat",
-        "deer",
-        "dog",
-        "frog",
-        "horse",
-        "ship",
-        "truck",
-    )
+    "plane",
+    "car",
+    "bird",
+    "cat",
+    "deer",
+    "dog",
+    "frog",
+    "horse",
+    "ship",
+    "truck",
+)
 
 
 def train(train_dataloader):
