@@ -32,7 +32,7 @@ without modifying the solvers.
 ## 1) Install Requirements
 Built With: `Python 3.10`
 ```
-pip install -r equirements.txt
+pip install -r requirements.txt
 ```
 ## 2) Select Desired `ResNet` Model
 Uncomment the desired model in `src/training/train.py`, each of which already contains the correct state compute ratios.
